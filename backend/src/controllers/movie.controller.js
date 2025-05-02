@@ -36,8 +36,8 @@ router.get('/tv',async(req, res)=>{
 router.get('/search',async(req, res)=>{
     try {
         const q = req.query.q
-        const language = "en-US" || req.query.language
-        url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&language=${language}&query=${q}&page=1&include_adult=false`
+        const language = req.query.language ||  "en-US" 
+        const url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&language=${language}&query=${q}&page=1&include_adult=false`
         const response = await axios.get(url)
         return res
         .send(response.data)
