@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./src"
+    "start": "nodemon ./frontend/hotstar/src/index.js"
   },
   "repository": {
     "type": "git",
@@ -28,8 +28,13 @@
     "mongoose": "^6.2.9",
     "passport": "^0.5.2",
     "passport-google-oauth2": "^0.2.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-google-login": "^5.2.2",
     "react-youtube": "^7.14.0",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
