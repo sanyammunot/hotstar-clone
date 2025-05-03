@@ -20,7 +20,7 @@ function AllRoutes() {
         <Route path="/watchlist" element={<WatchList/>}></Route>
         <Route path="/profile" element={<Profile/>}></Route>
       </Routes>
-//      <Footer></Footer>
+      {/* <Footer></Footer> */}
     </>
   );
 }
