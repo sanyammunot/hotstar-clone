@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-//import Footer from "./components/footer/footer";
+import Footer from "./components/footer/footer";
 import IndividualPage from "./components/IndividualPage/IndividualPage";
 import MainPage from "./components/MainPage/MainPage";
 import Navbar from "./components/Navbar/Navbar";
@@ -14,13 +14,13 @@ function AllRoutes() {
       <Routes>
         <Route path="/" element={<MainPage></MainPage>}></Route>
         <Route path="/:category" element={<MainPage ></MainPage>} ></Route>
-        {/* <Route path="/:category/:language" element={<MainPage ></MainPage>} ></Route> */}
+        <Route path="/:category/:language" element={<MainPage ></MainPage>} ></Route>
         <Route  path={`/:category/:id`}  element={<IndividualPage  ></IndividualPage>} ></Route>
         <Route path="/:category/:id/video" element={<VideoPage></VideoPage>}></Route>
         <Route path="/watchlist" element={<WatchList/>}></Route>
         <Route path="/profile" element={<Profile/>}></Route>
       </Routes>
-      {/* <Footer></Footer> */}
+      <Footer></Footer>
     </>
   );
 }
