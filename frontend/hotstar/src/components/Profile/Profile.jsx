@@ -16,20 +16,14 @@ export function Profile (){
                 <div className="bottomdiv">
                     <div>
                         Disney+ Hotstar Mobile for ₹ 499/year 
-                        Valid till: 31 May 2025</div>
+                        Valid till: 27 Mar 2026</div>
                     <div>UPGRADE PLAN</div>
                     <div>View Transactions</div>
                     <div>Account Settings</div>
                     <div>Manage Devices</div>
-                    <div>Log Out</div>
+                    <div>Log Out All Devices</div>
                 </div>
             </div>
         </>
     )
 }
-
-
-
-
-
-

@@ -7,33 +7,34 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 function MainPage() {
-  
-  const {category,language} = useParams()
+  const { category, language } = useParams();
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    getData()
-  }, [category,language]);
+    getData();
+  }, [category, language]);
 
   const getData = () => {
     axios
       .get(
-        `https://hotstar-v.herokuapp.com/${category || "movies"}?language=${language?language:"en"}`
+        `https://api.themoviedb.org/3/${category || "movie/popular"}?api_key=23c421d7119114c8fafc43641f433e4c&language=${language || "en"}`
       )
       .then((res) => {
         setData(res.data.results);
-      });
+      })
+      .catch((err) => console.error("Error fetching banner data:", err));
   };
 
-  
   const row_titles = [
-    { category: "Popular Shows", language: "en" },
-    { category: "Latest & Trending", language: "hi" },
-    { category: "Shows Recommended For You", language: "ta" },
-    { category: "Action", language: "ml" },
-    { category: "Movies Recommended For You", language: "te" },
+    { title: "Now Playing in Theatres", language: "te", apiCategory: "movie/now_playing" },
+    { title: "Popular Movies", language: "en", apiCategory: "movie/popular" },
+    { title: "Trending Today", language: "ta", apiCategory: "trending/all/day" },
+    { title: "Top Rated Movies", language: "hi", apiCategory: "movie/top_rated" },
+    { title: "Upcoming Movies", language: "ml", apiCategory: "movie/upcoming" },
   ];
-  let baseImgUrl = 'https://image.tmdb.org/t/p/original'
+
+  const baseImgUrl = 'https://image.tmdb.org/t/p/original';
+
   return (
     <div>
       <Carousel
@@ -44,28 +45,30 @@ function MainPage() {
         showIndicators={false}
         transitionTime={700}
         showThumbs={false}
-        >
+      >
         {data.map((el, index) => (
           <Banner
-          idm ={el.id}
-          key={index}
-          img={`${baseImgUrl}${el.backdrop_path}`}
-          title={el.title || el.name}
-          genre={el.genre}
-          description={el.overview}
-          mediaType = {el.media_type}
-          
-          
+            idm={el.id}
+            key={index}
+            img={`${baseImgUrl}${el.backdrop_path}`}
+            title={el.title || el.name}
+            genre={el.genre}
+            description={el.overview}
+            mediaType={el.media_type}
           />
-          ))}
-      </Carousel>
-      <CardRows row_title={`Latest & Trending`} ></CardRows>
-      {row_titles.map((el, index) => (
-        <CardRows key={index} language={el.language} row_title={el.category} />
         ))}
+      </Carousel>
+
+      {row_titles.map((el, index) => (
+        <CardRows
+          key={index}
+          row_title={el.title}
+          language={el.language}
+          apiCategory={el.apiCategory}
+        />
+      ))}
     </div>
   );
 }
 
 export default MainPage;
-

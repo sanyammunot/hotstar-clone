@@ -8,7 +8,7 @@ export const Card = ({ id, title, description, imageUrl, media_type }) => {
   let baseImgUrl = "https://image.tmdb.org/t/p/original"; // + imageUrl
   const [data, setData] = useState({});
   const getData = async () => {
-    const url = `https://api.themoviedb.org/3/${media_type || `movie`}/${id}?api_key=3e3f0a46d6f2abc8e557d06b3fc21a77&language=en-US`;
+    const url = `https://api.themoviedb.org/3/${media_type || `movie`}/${id}?api_key=23c421d7119114c8fafc43641f433e4c&language=en-US`;
     const a = await axios.get(url);
     setData(a.data);
   };
@@ -37,4 +37,4 @@ export const Card = ({ id, title, description, imageUrl, media_type }) => {
   );
 };
 
-//discription : 'https://api.themoviedb.org/3/movie/852659?api_key=3e3f0a46d6f2abc8e557d06b3fc21a77&language=en-US'
+//discription : 'https://api.themoviedb.org/3/movie/852659?api_key=23c421d7119114c8fafc43641f433e4c&language=en-US'

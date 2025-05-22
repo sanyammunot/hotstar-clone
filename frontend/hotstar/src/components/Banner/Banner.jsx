@@ -1,167 +1,139 @@
 import "./Banner.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import PlayIcon from "@mui/icons-material/PlayArrowRounded";
-import AddToListIcon from "@mui/icons-material/PlaylistAddRounded";
-import ShareIcon from "@mui/icons-material/ShareRounded";
-import AddCircleIcon from '@mui/icons-material/Add';
-import ConfirmIcon from '@mui/icons-material/Check';
-import { useEffect, useState } from "react";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import PlaylistAddRoundedIcon from "@mui/icons-material/PlaylistAddRounded";
+import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
+import AddIcon from '@mui/icons-material/Add';
+import CheckIcon from '@mui/icons-material/Check';
+import axios from "axios";
+import {useEffect} from "react";
+import { useState } from "react";
 
-function Banner({
-  original_title,
-  title,
-  year,
-  genre,
-  description,
-  img,
-  idm,
-  mediaType
-}) {
-  const [isInWatchlist, setIsInWatchlist] = useState(false);
-  const [watchlistItemId, setWatchlistItemId] = useState("");
-  const { id, category } = useParams();
-  const [watchlistData, setWatchlistData] = useState([]);
+function Banner({original_title, title, year, genre, description, img, idm, mediaType }) {
+  const[Status,setStatus]=useState(false);
+  const[wishid,setWishid]=useState("");
+  const {id, category} = useParams();
+  const [ wishdata , setWishData ] = useState([])
 
-  // Fetch current user's watchlist from server
-  const fetchWatchlist = async () => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) return;
-    
-    const { token } = JSON.parse(storedUser);
-    
-    try {
-      const response = await fetch("https://hotstar-v.herokuapp.com/watchlist", {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-          Authentication: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      setWatchlistData(data);
-    } catch (error) {
-      console.error("Error fetching watchlist:", error);
+  async function getWishlist(){
+    const user = localStorage.getItem('user')
+    const {token} = JSON.parse(user)
+    const a = await fetch('http://localhost:7000/watchlist',{
+    // const a = await fetch('https://hotstar-v.herokuapp.com/watchlist',{
+        method : "GET",
+        headers : {
+          "content-type" : "application/json",
+          Authentication : `Bearer ${token}`
+        }
+      })
+      const b = await a.json()
+      setWishData(b);
     }
-  };
+useEffect(()=>{ getWishlist()},[])
 
-  // Check if this item already exists in watchlist
-  useEffect(() => {
-    fetchWatchlist();
-  }, []);
-
-  useEffect(() => {
-    for (const item of watchlistData) {
-      if (item.title === original_title) {
-        setIsInWatchlist(true);
-        setWatchlistItemId(item._id);
-        break;
-      }
+useEffect(()=>{
+  for(let i=0;i<wishdata.length;i++){
+    if(original_title==wishdata[i].title){
+      setStatus(true);
+      setWishid(wishdata[i]._id)
     }
-  }, [watchlistData]);
+  }
+},[wishdata]);
 
-  useEffect(() => {
-    setIsInWatchlist(false);
-  }, [id]);
+useEffect(()=>{
+  setStatus(false)
+},[id]);
 
-  // Add current item to watchlist
-  const handleAddToWatchlist = async () => {
-    setIsInWatchlist(true);
-    const storedUser = localStorage.getItem("user");
 
-    if (!storedUser) {
-      alert("Please log in to add items to your watchlist");
-      return;
-    }
-
-    const { token } = JSON.parse(storedUser);
-
-    try {
-      const res = await fetch("http://localhost:7000/watchlist", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authentication: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          id,
-          imageUrl: img,
-          title,
-          overview: description,
+  async function addWatchList(){
+    setStatus(true);
+    const user = localStorage.getItem('user')
+    if(user)
+    {
+      const {token} = JSON.parse(user)
+      const a = await fetch('http://localhost:7000/watchlist',{
+      // const a = await fetch('http://localhost:7000/watchlist',{
+        method : "POST",
+        body : JSON.stringify({
+          id:id,
+          imageUrl : img,
+          title :title,
+          overview : description
         }),
+        headers : {
+          "content-type" : "application/json",
+          Authentication : `Bearer ${token}`
+        }
       });
-
-      const addedItem = await res.json();
-      setWatchlistItemId(addedItem._id);
-    } catch (err) {
-      console.error("Failed to add to watchlist:", err);
+      
+      const b = await a.json()
+      setWishid(b._id)
+      setStatus(true)
     }
-  };
+    else
+      {
+        alert('Please SignIn to add this movie in your watchlist')
+      }
 
-  // Remove current item from watchlist
-  const handleRemoveFromWatchlist = async () => {
-    setIsInWatchlist(false);
+  }
 
-    try {
-      await fetch(`https://hotstar-v.herokuapp.com/watchlist/${watchlistItemId}`, {
-        method: "DELETE",
+   async function deleteWatchList(){
+     setStatus(false);
+    {
+      const a = await fetch(`http://localhost:7000/watchlist/${wishid}`,{
+      // const a = await fetch(`https://hotstar-v.herokuapp.com/watchlist/${wishid}`,{
+      
+        method : "DELETE",
       });
-    } catch (err) {
-      console.error("Failed to remove from watchlist:", err);
     }
-  };
+  }
 
   return (
-    <Link to={mediaType === "tv" ? `/tv/${idm}` : `/movie/${idm || id}`}>
+    <Link  to={ mediaType=="tv"? `/tv/${idm}`:`/movie/${idm || id}`}>
       <div className="banner-container">
         <div className="banner-left">
           <div className="banner-details">
             <h1>{title}</h1>
             <div id="genre">
-              <span>{genre}</span>
+              <span> {genre}</span>
             </div>
             <p className="banner-descr">{description}</p>
           </div>
-
-          {id && (
+          {id ? (
             <div className="btns">
               <Link to={`/${category}/${id}/video`}>
-                <div>
-                  <PlayIcon fontSize="large" className="play-icon" />
-                  <h2>Watch Movie</h2>
-                </div>
-              </Link>
+              <div >
+                <PlayArrowRoundedIcon
+                  fontSize="large"
+                  className="play-icon"
+                ></PlayArrowRoundedIcon>
 
+                <h2>Watch Movie</h2>
+              </div>
+              </Link>
               <div>
                 <div className="playlist-btn">
-                  {isInWatchlist ? (
-                    <ConfirmIcon
-                      className="checkIcon"
-                      onClick={handleRemoveFromWatchlist}
-                      fontSize="large"
-                    />
-                  ) : (
-                    <AddCircleIcon
-                      onClick={handleAddToWatchlist}
-                      fontSize="large"
-                    />
-                  )}
+                  {Status?<CheckIcon className="checkIcon" onClick={deleteWatchList} fontSize="large"></CheckIcon>:<AddIcon onClick={addWatchList} fontSize="large"></AddIcon>}
                   watchlist
                 </div>
                 <div>
-                  <ShareIcon />
+                  <ShareRoundedIcon ></ShareRoundedIcon>
                   share
                 </div>
               </div>
             </div>
+          ) : (
+            ""
           )}
         </div>
-
         <div
           className="banner-right"
           style={{
             backgroundImage: `url(${img})`,
           }}
-        ></div>
+        >
+          <div></div>
+        </div>
       </div>
     </Link>
   );

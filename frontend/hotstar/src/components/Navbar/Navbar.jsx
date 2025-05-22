@@ -30,8 +30,8 @@ function Navbar() {
     navigate('/')
   }
   const handleLogin = async (googleData)=>{
-    // const res2 = await axios.post('http://localhost:7000/google/login',{
-    const res2 = await axios.post('https://hotstar-v.herokuapp.com/google/login',{
+    const res2 = await axios.post('http://localhost:7000/google/login',{
+    // const res2 = await axios.post('https://hotstar-v.herokuapp.com/google/login',{
       token : googleData.tokenId
     })
     localStorage.setItem('user', JSON.stringify(res2.data))
@@ -151,49 +151,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-{/* <div className="epField">
-<input onChange={handleInput} className="email" name="email" type="text" placeholder="Enter Your Email" /><br />
-<input onChange={handleInput} className="password" name="password" type="text" placeholder="Enter Your Password" />
-</div>
-<div className="loginBtn">
-<button onClick={signUp}>SignUp</button>
-<button onClick={signIn}>SignIn</button>
-</div>
-<br></br>
-<p style={{
-  marginLeft: "45%"
-}}>or</p>
-<button className="btn">Have a Facebook/Email Account?</button> */}
-// const signUp = async () => {
-  //   const a = await axios.post(`http://localhost:7000/signup`, user)
-  //   if (a.data.status) {
-    //     alert("Successfull")
-    //     return
-    //   }
-    //   else
-    //     return alert('failed')
-    // }
-    // const signIn = async () => {
-      //   const a = await axios.post(`http://localhost:7000/signin`, user)
-      //   if (a.data.status) {
-        //     const { token } = a.data
-//     localStorage.setItem('user', JSON.stringify(token))
-//     setAuth(true)
-//     navigate('/profile')
-//     return
-//   }
-//   else
-//     return alert('failed')
-
-
-// const dummyUser = {
-//   email: "",
-//   password: ""
-// }
-// const [user, setUser] = useState(dummyUser)
-// function handleInput(e) {
-//   let { name, value } = e.target
-//   setUser({ ...user, [name]: value })
-// }
-// // }

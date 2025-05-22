@@ -13,13 +13,13 @@ function IndividualPage(props) {
   
   const [data, setData] = useState({})
   const getData = async () => {
-    const url = `https://api.themoviedb.org/3/${category}/${id}?api_key=3e3f0a46d6f2abc8e557d06b3fc21a77&language=en-US`
+    const url = `https://api.themoviedb.org/3/${category}/${id}?api_key=23c421d7119114c8fafc43641f433e4c&language=en-US`
     const a = await axios.get(url)
     setData(a.data)
   }
 
   let baseImgUrl = 'https://image.tmdb.org/t/p/original'
-  console.log("data is not coming",data);
+  // console.log("data is not coming",data);
   
   return (
     

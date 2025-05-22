@@ -20,7 +20,7 @@ export const Search = () => {
 
     await axios
       .get(
-        `https://api.themoviedb.org/3/search/movie?api_key=3e3f0a46d6f2abc8e557d06b3fc21a77&query=${text}&page=1&include_adult=false`
+        `https://api.themoviedb.org/3/search/movie?api_key=23c421d7119114c8fafc43641f433e4c&query=${text}&page=1&include_adult=false`
       )
       .then((res) => {
         setData(res.data.results);
